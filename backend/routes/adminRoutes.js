@@ -94,37 +94,33 @@ adminRouter.post('/addProduct', upload.single('image'), async (req, res) => {
     data,
   });
 });
-adminRouter.patch(
-  '/updateProduct/:id',
-  upload.single('image'),
-  async (req, res) => {
-    // cut down the image address from ../frontend/publice/images to=> /images/
-    const newImage = req.file.destination.substring(18, 26);
-    // console.log(req.files);
-    const result = await Products.updateOne(
-      { _id: req.params.id },
-      {
-        $set: {
-          name: req.body.name,
-          slug: req.body.slug,
-          category: req.body.category,
-          image: newImage + req.file.originalname,
-          price: req.body.price,
-          actualPrice: req.body.actualPrice,
-          countInStock: req.body.countInStock,
-          brand: req.body.brand,
-          description: req.body.description,
+adminRouter.patch('/updateProduct/:id', async (req, res) => {
+  // cut down the image address from ../frontend/publice/images to=> /images/
+  const newImage = req.file.destination.substring(18, 26);
+  // console.log(req.files);
+  const result = await Products.updateOne(
+    { _id: req.params.id },
+    {
+      $set: {
+        name: req.body.name,
+        slug: req.body.slug,
+        category: req.body.category,
+        image: newImage + req.file.originalname,
+        price: req.body.price,
+        actualPrice: req.body.actualPrice,
+        countInStock: req.body.countInStock,
+        brand: req.body.brand,
+        description: req.body.description,
 
-          quality: req.body.quality,
-          sale: req.body.sale || 0,
-        },
-      }
-    );
-    res.send({
-      result,
-    });
-  }
-);
+        quality: req.body.quality,
+        sale: req.body.sale || 0,
+      },
+    }
+  );
+  res.send({
+    result,
+  });
+});
 adminRouter.delete('/removeProduct/:id', async (req, res) => {
   // console.log(req.params.id);
   const response = await Products.remove({ _id: req.params.id });

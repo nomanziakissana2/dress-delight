@@ -7,7 +7,7 @@ import multer from 'multer';
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, '../frontend/public/images/');
+    cb(null, path.join(__dirname, '/frontend/build/images/'));
   },
   filename: function (req, file, cb) {
     cb(null, file.originalname);
@@ -96,7 +96,7 @@ adminRouter.post('/addProduct', upload.single('image'), async (req, res) => {
 });
 adminRouter.patch('/updateProduct/:id', async (req, res) => {
   // cut down the image address from ../frontend/publice/images to=> /images/
-  const newImage = req.file.destination.substring(18, 26);
+  // const newImage = req.file.destination.substring(18, 26);
   // console.log(req.files);
   const result = await Products.updateOne(
     { _id: req.params.id },
@@ -105,7 +105,7 @@ adminRouter.patch('/updateProduct/:id', async (req, res) => {
         name: req.body.name,
         slug: req.body.slug,
         category: req.body.category,
-        image: newImage + req.file.originalname,
+        image: '/images/p4.png', //image: newImage + req.file.originalname
         price: req.body.price,
         actualPrice: req.body.actualPrice,
         countInStock: req.body.countInStock,
